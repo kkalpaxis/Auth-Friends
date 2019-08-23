@@ -1,47 +1,34 @@
-import React from 'react'
-import Friend from './Friend';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux'
-import { getFriends } from "../actions"
-import { withRouter } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+import axiosWithAuth from './AxiosWithAuth';
+import FriendForm from "./FriendForm";
 
-class Friends extends React.Component {
+const Friends = (props) => {
+	const [friendsList, setFriendsList] = useState([]);
 	
-	componentDidMount() {
-	    this.props.getFriends();
-	}
-	
-	
-	render() {
-	    return (
-	        <div className="friends">
-	            {this.props.fetchingData && (
-	                    <p>Loading Data...</p>
-	            )}
-	
-	            {this.props.friends && (this.props.friends.map(friend => (
-	                <div className='friend' key={friend.id}>
-	                    <Friend friend={friend} />
-	                </div>)
-	            ))}
-            </div>
-            )
-	}
-}
-	
-	Friends.propTypes = {
-	    friends: PropTypes.arrayOf(PropTypes.shape({
-	        id: PropTypes.number,
-	        name: PropTypes.string,
-	        age: PropTypes.number,
-	        email: PropTypes.string
-	    }))
-	}
-	
-	const mapStateToProps = state => ({
-	friends: state.friends.friends,
-	fetchingData: state.friends.fetchingData
-	
-})
+	useEffect(() => {
+		axiosWithAuth().get('http://localhost:5000/api/friends')
+			.then(res => {
+				console.log(res);
+			})
+			.catch(err => console.log(err.response));
+	}, []);
 
-export default withRouter(connect (mapStateToProps, {getFriends})(Friends));
+	const addFriend = friend => {
+		axiosWithAuth().post('http://localhost:5000/api/friends', friend)
+			.then(res => setFriendsList(res.data))
+			.catch(err => console.log(error.response))
+	}
+
+	return (
+		<div>
+			<h1>Friends</h1>
+			<FriendForm submitFriend={addFriend} />
+			{friendsList.map(friend => {
+				return <div key={friend.id}>{friend.name}</div>
+			})}
+		</div>
+	)
+};
+
+export default Friends;
