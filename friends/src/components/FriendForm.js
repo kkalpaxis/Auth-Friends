@@ -33,3 +33,5 @@ const FriendForm = ({ submitFriend }) => {
         </form>
     );
 };
+
+export default FriendForm;

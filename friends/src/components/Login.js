@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const Login = ({ history }) => {
-    console.log(props);
     const [credentials, setCredentials] = useState({
         username: "",
         password: ""
@@ -30,13 +29,15 @@ const Login = ({ history }) => {
                 name="username" 
                 placeholder="username" 
                 onChange={handleChange}
-                value={creds.username} />
+                value={credentials.username} />
             <input type="password" 
                 name="password" 
                 placeholder="password" 
                 onChange={handleChange}
-                value={creds.password} />
+                value={credentials.password} />
             <button type="submit">Log In</button>
         </form>
     )
 }
+
+export default Login;

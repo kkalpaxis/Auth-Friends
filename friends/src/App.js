@@ -5,6 +5,7 @@ import Login from './components/Login.js'
 import Friends from './components/Friend'
 
 const ProtectedRoute = ({component: Component, ...rest}) => {
+	//build props variable
 	return <Route {...propsWithoutComponent} render={props => {
 		if (localStorage.getItem('token')) {
 			return <Component {...props} />;
